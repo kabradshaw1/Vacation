@@ -1,0 +1,16 @@
+fragment PersonSummary on Person {
+  full_name
+}
+
+query FetchParentsAndChildren {
+  fetch_person(id: "1") {
+    parents {
+      ...PersonSummary
+      nickname
+    }
+
+    children {
+      ...PersonSummary
+    }
+  }
+}

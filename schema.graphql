@@ -1,0 +1,629 @@
+directive @auth on FIELD_DEFINITION
+
+"""
+The @defer directive may be specified on a fragment spread to imply
+de-prioritization, that causes the fragment to be omitted in the initial
+response, and delivered as a subsequent response afterward. A query with @defer
+directive will cause the request to potentially return multiple responses, where
+non-deferred data is delivered in the initial response and data deferred
+delivered in a subsequent response. @include and @skip take precedence over @defer.
+"""
+directive @defer(if: Boolean = true, label: String) on FRAGMENT_SPREAD | INLINE_FRAGMENT
+
+"""
+The @specifiedBy built-in directive is used within the type system definition
+language to provide a scalar specification URL for specifying the behavior of
+custom scalar types.
+"""
+directive @specifiedBy(url: String!) on SCALAR
+
+type AIImage {
+  correlationID: String!
+}
+
+input AIImageInput {
+  prompt: String!
+  callback: String!
+  lora: [Int]!
+  class: String!
+}
+
+type Auth {
+  token: String!
+  refreshToken: String!
+}
+
+type Casualties {
+  id: Int!
+  casualties: Int!
+  createdAt: String!
+  updatedAt: String
+  cannon: Boolean!
+  user: String!
+  scene: Scene!
+  ship: Ship!
+  shipID: Int!
+  sceneID: Int!
+}
+
+type Character {
+  id: Int!
+  title: String!
+  text: String
+  createdAt: String!
+  updatedAt: String
+  cannon: Boolean!
+  user: String!
+  scenes: [Scene]
+  roles: [Role]
+  images: [Image]
+}
+
+type Comment {
+  id: String!
+  text: String!
+  user: String!
+  createdAt: String!
+  updatedAt: String
+  comments: [Comment]
+  likedBy: [String]
+}
+
+type Conflict {
+  id: Int!
+  title: String!
+  text: String
+  createdAt: String!
+  updatedAt: String
+  cannon: Boolean!
+  user: String!
+  scenes: [Scene]
+  organizations: [Organization]
+  images: [Image]
+}
+
+input CreateCharacterInput {
+  title: String!
+  text: String
+  roleIDs: [Int]
+  files: [FileInput]
+  genImage: [GenImage]
+}
+
+input CreateCommentInput {
+  text: String!
+  parentID: String!
+  postID: String!
+}
+
+input CreateConflictInput {
+  title: String!
+  text: String
+  organizationIDs: [Int]
+  files: [FileInput]
+  genImage: [GenImage]
+}
+
+input CreateImageInput {
+  prompt: String!
+}
+
+input CreateLocationInput {
+  title: String!
+  text: String
+  shipID: Int
+  organizationIDs: [Int]
+  files: [FileInput]
+  rFiles: [Int!]
+  genImage: [GenImage]
+}
+
+input CreateOrganizationInput {
+  title: String!
+  text: String
+  rolesCreate: [CreateRoleInput]
+  conflictIDs: [Int]
+  headquartersID: Int
+  locationIDs: [Int]
+  files: [FileInput]
+  genImage: [GenImage]
+}
+
+input CreatePostInput {
+  text: String!
+  class: String!
+  classID: Int!
+}
+
+input CreateRoleInput {
+  title: String!
+  text: String
+  superiorTitle: String
+}
+
+input CreateSceneInput {
+  title: String!
+  text: String
+  startTimeline: Int!
+  endTimeline: Int!
+  characterIDs: [Int]
+  locationIDs: [Int]
+  conflictIDs: [Int]
+  casualties: [SceneCasualtiesInput]
+  organizationIDs: [Int]
+  files: [FileInput]
+  genImage: [GenImage]
+}
+
+input CreateSceneSequenceInput {
+  order: Int!
+  sceneID: Int!
+  genImage: [GenImage]
+}
+
+input CreateSequenceInput {
+  scenes: [CreateSceneSequenceInput!]!
+  text: String
+  title: String!
+  files: [FileInput]
+  genImage: [GenImage]
+}
+
+input CreateShipInput {
+  title: String!
+  text: String
+  locationIDs: [Int]
+  files: [FileInput]
+  genImage: [GenImage]
+}
+
+input CropImage {
+  x: Int!
+  y: Int!
+  id: Int!
+}
+
+input DeleteTextInput {
+  id: String!
+  postID: String!
+}
+
+type Donation {
+  amount: Int!
+  createdAt: String!
+  currency: String!
+}
+
+input FileInput {
+  fileName: String!
+  fileType: String!
+}
+
+type Forgot {
+  message: String!
+}
+
+input ForgotPasswordInput {
+  email: String!
+}
+
+input GenImage {
+  fileName: String!
+}
+
+input GenImageArg {
+  entityType: String!
+}
+
+type IAProduct {
+  correlationID: String!
+  goods: String!
+}
+
+type Image {
+  URL: String!
+  fileName: String!
+  TTL: String!
+  id: Int!
+  x: Int
+  y: Int
+}
+
+input LikeInput {
+  postID: String!
+  parentID: String!
+}
+
+type Location {
+  id: Int!
+  title: String!
+  text: String
+  createdAt: String!
+  updatedAt: String
+  cannon: Boolean!
+  user: String!
+  scenes: [Scene]
+  ship: Ship
+  organizations: [Organization]
+  headquartersOf: [Organization]
+  images: [Image]
+  shipID: Int
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type LoRA {
+  title: String!
+  id: Int!
+}
+
+input LoRAUploadInput {
+  fileType: String!
+  fileName: String!
+}
+
+input MongoIDInput {
+  postID: String!
+}
+
+type Mutation {
+  createPost(input: CreatePostInput!): Post
+  updateText(input: UpdateTextInput!): Post
+  deleteText(input: DeleteTextInput!): Post
+  createComment(input: CreateCommentInput!): Post
+  createLike(input: LikeInput!): Post
+  deleteLike(input: LikeInput!): Post
+  createCharacter(input: CreateCharacterInput!): Character
+  updateCharacter(input: UpdateCharacterInput!): Character
+  deleteCharacter(input: PostGresIDInput!): Character
+  createConflict(input: CreateConflictInput!): Conflict
+  updateConflict(input: UpdateConflictInput!): Conflict
+  deleteConflict(input: PostGresIDInput!): Conflict
+  createLocation(input: CreateLocationInput!): Location
+  updateLocation(input: UpdateLocationInput!): Location
+  deleteLocation(input: PostGresIDInput!): Location
+  createOrganization(input: CreateOrganizationInput!): Organization
+  updateOrganization(input: UpdateOrganizationInput!): Organization
+  deleteOrganization(input: PostGresIDInput!): Organization
+  createScene(input: CreateSceneInput!): Scene
+  updateScene(input: UpdateSceneInput!): Scene
+  deleteScene(input: PostGresIDInput!): Scene
+  createSequence(input: CreateSequenceInput!): Sequence
+  updateSequence(input: UpdateSequenceInput!): Sequence
+  deleteSequence(input: PostGresIDInput!): Sequence
+  createShip(input: CreateShipInput!): Ship
+  updateShip(input: UpdateShipInput!): Ship
+  deleteShip(input: PostGresIDInput!): Ship
+  createPaymentIntent(input: PaymentInput!): PaymentIntent
+  createGenImage(input: AIImageInput!): AIImage
+  cropImage(input: CropImage!): Image
+  loginMobile(input: LoginInput!): Auth
+  registerMobile(input: RegisterInput!): Auth
+  refreshMobile(input: RefreshInput!): Refresh
+  forgotPassword(input: ForgotPasswordInput!): Forgot
+  updateUser(input: UpdateInput!): User
+}
+
+type MyGenImages {
+  fileName: String!
+  downloadURL: String!
+}
+
+type Organization {
+  id: Int!
+  title: String!
+  text: String
+  createdAt: String!
+  updatedAt: String
+  cannon: Boolean!
+  user: String!
+  conflicts: [Conflict]
+  scenes: [Scene]
+  headquarters: Location
+  locations: [Location]
+  roles: [Role]
+  images: [Image]
+  headquartersID: Int
+}
+
+input ParentInput {
+  id: Int!
+  class: String!
+}
+
+input PaymentInput {
+  amount: Int!
+  currency: String!
+}
+
+type PaymentIntent {
+  id: String!
+  clientSecret: String!
+}
+
+type Post {
+  postID: String!
+  id: String!
+  text: String!
+  user: String!
+  class: String!
+  classId: Int!
+  createdAt: String!
+  updatedAt: String
+  comments: [Comment]
+  likedBy: [String]
+}
+
+input PostGresIDInput {
+  id: Int!
+}
+
+type Query {
+  posts(input: ParentInput!): [Post]
+  post(input: MongoIDInput!): Post
+  character(input: PostGresIDInput!): Character
+  characters(input: StoryFilterInput!): [Character]
+  conflict(input: PostGresIDInput!): Conflict
+  conflicts(input: StoryFilterInput!): [Conflict]
+  location(input: PostGresIDInput!): Location
+  locations(input: StoryFilterInput!): [Location]
+  organization(input: PostGresIDInput!): Organization
+  organizations(input: StoryFilterInput!): [Organization]
+  role(input: PostGresIDInput!): Role
+  roles(input: StoryFilterInput!): [Role]
+  scene(input: PostGresIDInput!): Scene
+  scenes(input: StoryFilterInput!): [Scene]
+  sequence(input: PostGresIDInput!): Sequence
+  sequences(input: StoryFilterInput!): [Sequence]
+  ship(input: PostGresIDInput!): Ship
+  ships(input: StoryFilterInput!): [Ship]
+  donations: [Donation]
+  ragCharacter(input: CreateCharacterInput!): Rag
+  ragConflict(input: CreateConflictInput!): Rag
+  ragLocation(input: CreateLocationInput!): Rag
+  ragOrganization(input: CreateOrganizationInput!): Rag
+  ragScene(input: RagSceneInput!): Rag
+  ragSequence(input: CreateSequenceInput!): Rag
+  ragShip(input: CreateShipInput!): Rag
+  myGenImages(input: GenImageArg!): [MyGenImages]
+  lora(input: GenImageArg!): [LoRA]
+}
+
+type Rag {
+  text: String!
+}
+
+input RagCasualties {
+  shipName: String!
+  casualties: Int!
+}
+
+input RagRole {
+  organizationText: String!
+  organizationTitle: String!
+  superiorTitle: String!
+  superiorText: String!
+  text: String!
+}
+
+input RagSceneInput {
+  text: String!
+  startTimeline: Int
+  endTimeline: Int
+  characterIDs: [Int]
+  locationIDs: [Int]
+  conflictIDs: [Int]
+  organizationIDs: [Int]
+  casualties: [RagCasualties]
+}
+
+type RagStreamResponse {
+  text: String
+  done: Boolean
+}
+
+type Refresh {
+  token: String!
+}
+
+input RefreshInput {
+  refreshToken: String!
+}
+
+input RegisterInput {
+  email: String!
+  password: String!
+  username: String!
+}
+
+input RFileInput {
+  id: Int!
+}
+
+type Role {
+  id: Int!
+  title: String!
+  text: String
+  createdAt: String!
+  updatedAt: String
+  cannon: Boolean!
+  user: String!
+  organization: Organization!
+  superiorTitle: String
+  characters: [Character]
+  organizationID: Int!
+}
+
+type Scene {
+  id: Int!
+  title: String!
+  text: String
+  startTimeline: Int!
+  endTimeline: Int!
+  createdAt: String!
+  updatedAt: String
+  cannon: Boolean!
+  user: String!
+  characters: [Character]
+  locations: [Location]
+  conflicts: [Conflict]
+  casualties: [Casualties]
+  organizations: [Organization]
+  images: [Image]
+}
+
+input SceneCasualtiesInput {
+  casualties: Int!
+  shipID: Int!
+}
+
+type ScenesInSequence {
+  createdAt: String!
+  updatedAt: String
+  order: Int!
+  scene: Scene
+}
+
+type Sequence {
+  id: Int!
+  title: String!
+  text: String
+  user: String!
+  createdAt: String!
+  updatedAt: String
+  scenesInSequence: [ScenesInSequence]
+  images: [Image]
+}
+
+type Ship {
+  id: Int!
+  title: String!
+  text: String
+  createdAt: String!
+  updatedAt: String
+  cannon: Boolean!
+  user: String!
+  locations: [Location]
+  casualties: [Casualties]
+  images: [Image]
+}
+
+input StoryFilterInput {
+  cannon: Boolean
+  user: String
+  limit: Int
+  offset: Int
+}
+
+type Subscription {
+  ragStreamCharacter(input: CreateCharacterInput!): RagStreamResponse!
+  ragStreamConflict(input: CreateConflictInput!): RagStreamResponse!
+  ragStreamLocation(input: CreateLocationInput!): RagStreamResponse!
+  ragStreamOrganization(input: CreateOrganizationInput!): RagStreamResponse!
+  ragStreamRole(input: RagRole!): RagStreamResponse!
+  ragStreamSequence(input: CreateSequenceInput!): RagStreamResponse!
+  ragStreamShip(input: CreateShipInput!): RagStreamResponse!
+  ragStreamScene(input: RagSceneInput!): RagStreamResponse!
+}
+
+input UpdateCharacterInput {
+  id: Int!
+  title: String
+  text: String
+  roleIDs: [Int]
+  files: [FileInput]
+  rFiles: [Int!]
+  genImage: [GenImage]
+}
+
+input UpdateConflictInput {
+  id: Int!
+  title: String
+  text: String
+  organizationIDs: [Int]
+  files: [FileInput]
+  rFiles: [Int!]
+  genImage: [GenImage]
+}
+
+input UpdateInput {
+  email: String
+  password: String
+  username: String
+}
+
+input UpdateLocationInput {
+  id: Int!
+  title: String
+  text: String
+  shipID: Int
+  organizationIDs: [Int]
+  files: [FileInput]
+  rFiles: [Int!]
+  genImage: [GenImage]
+}
+
+input UpdateOrganizationInput {
+  id: Int!
+  title: String
+  text: String
+  rolesCreate: [CreateRoleInput]
+  rolesDelete: [Int!]
+  conflictIDs: [Int]
+  headquartersID: Int
+  locationIDs: [Int]
+  files: [FileInput]
+  rFiles: [Int!]
+  genImage: [GenImage]
+}
+
+input UpdateSceneInput {
+  id: Int!
+  title: String
+  text: String
+  startTimeline: Int!
+  endTimeline: Int!
+  characterIDs: [Int]
+  locationIDs: [Int]
+  conflictIDs: [Int]
+  casualties: [SceneCasualtiesInput]
+  organizationIDs: [Int]
+  files: [FileInput]
+  rFiles: [Int!]
+  genImage: [GenImage]
+}
+
+input UpdateSequenceInput {
+  id: Int!
+  scenes: [CreateSceneSequenceInput]
+  title: String
+  text: String
+  files: [FileInput]
+  rFiles: [Int!]
+  genImage: [GenImage]
+}
+
+input UpdateShipInput {
+  id: Int!
+  title: String
+  text: String
+  locationIDs: [Int]
+  files: [FileInput]
+  rFiles: [Int!]
+  genImage: [GenImage]
+}
+
+input UpdateTextInput {
+  id: String!
+  text: String!
+  postID: String!
+}
+
+type User {
+  email: String!
+  username: String!
+}
+
