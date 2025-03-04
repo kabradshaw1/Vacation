@@ -1,0 +1,35 @@
+mutation loginMobile($email: String!, $password: String!) {
+  loginMobile(input: {email: $email, password: $password})
+  {
+    refreshToken
+    token
+  }
+}
+
+mutation registerMobile($username: String!, $password: String!, $email: String!) {
+  registerMobile(input: {username: $username, password: $password, email: $email})
+  {
+    refreshToken
+    token
+  }
+}
+
+mutation forgotPassword($email: String!) {
+  forgotPassword(input: {email: $email}) 
+  {
+    message
+  }
+}
+
+mutation updateUser($email: String, $password: String, $username: String) {
+  updateUser(input: {username: $username, password: $password, email: $email}) {
+    email
+    username
+  }
+}
+
+mutation refreshToken($refreshToken: String!) {
+  refreshMobile(input: {refreshToken: $refreshToken}) {
+    token
+  }
+}

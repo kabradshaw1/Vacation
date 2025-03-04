@@ -14,9 +14,7 @@ class CharacterList extends ConsumerWidget {
     ); // Get GraphQLClient from Riverpod
 
     return FutureBuilder<QueryResult>(
-      future: client.query(
-        QueryOptions(document: documentNodeQuerygetCharacters),
-      ),
+      future: client.query(QueryOptions(document: documentNodeQueryCharacters)),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -30,9 +28,8 @@ class CharacterList extends ConsumerWidget {
           );
         }
 
-        final data = Query$getCharacters.fromJson(snapshot.data!.data!);
-        final List<Query$getCharacters$characters?>? characters =
-            data.characters;
+        final data = Query$Characters.fromJson(snapshot.data!.data!);
+        final List<Query$Characters$characters?>? characters = data.characters;
 
         if (characters == null || characters.isEmpty) {
           return const Center(child: Text("No characters found."));

@@ -9,14 +9,26 @@ class AuthState {
   final String? refreshToken;
   final String? authToken;
   final bool isGuest;
+  final String? username;
 
-  AuthState({this.refreshToken, this.authToken, this.isGuest = false});
+  AuthState({
+    this.refreshToken,
+    this.authToken,
+    this.isGuest = false,
+    this.username,
+  });
 
-  AuthState copyWith({String? refreshToken, String? authToken, bool? isGuest}) {
+  AuthState copyWith({
+    String? refreshToken,
+    String? authToken,
+    bool? isGuest,
+    String? username,
+  }) {
     return AuthState(
       refreshToken: refreshToken ?? this.refreshToken,
       authToken: authToken ?? this.authToken,
       isGuest: isGuest ?? this.isGuest,
+      username: username ?? this.username,
     );
   }
 }
@@ -47,7 +59,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   // Update short-lived token for API requests
-  void updateauthToken(String newToken) {
+  void updateAuthToken(String newToken) {
     state = state.copyWith(authToken: newToken);
   }
 
