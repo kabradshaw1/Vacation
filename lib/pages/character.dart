@@ -30,15 +30,18 @@ class CharacterList extends StatelessWidget {
           return const Center(child: Text("No characters found."));
         }
 
-        return ListView.builder(
-          itemCount: characters.length,
-          itemBuilder: (context, index) {
-            final character = characters[index];
+        return Container(
+          color: Colors.blueAccent,
+          child: ListView.builder(
+            itemCount: characters.length,
+            itemBuilder: (context, index) {
+              final character = characters[index];
 
-            if (character == null) return const SizedBox.shrink();
+              if (character == null) return const SizedBox.shrink();
 
-            return ListTile(title: Text(character.title));
-          },
+              return ListTile(title: Text(character.title));
+            },
+          ),
         );
       },
     );

@@ -11,18 +11,26 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _selectedIndex = 0; // Track which tab is active
+  int _currentIndex = 0; // Track the current tab index
+  final PageController _pageController =
+      PageController(); // Handles swipe navigation
 
-  // Define the screens
-  static const List<Widget> _pages = <Widget>[
-    CustomBody(), // Home Page
-    CharacterList(), // Character List Page
+  // List of pages to show
+  final List<Widget> _pages = [
+    const CustomBody(), // Home Page
+    const CharacterList(), // Character List Page
   ];
 
-  void _onItemTapped(int index) {
+  // Handle Bottom Navigation tap
+  void _onTabTapped(int index) {
     setState(() {
-      _selectedIndex = index; // Update selected index when tapping a tab
+      _currentIndex = index;
     });
+    _pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
   }
 
   @override
@@ -32,14 +40,18 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: IndexedStack(
-        // Keeps pages in memory when switching
-        index: _selectedIndex,
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
         children: _pages,
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
+        currentIndex: _currentIndex,
+        onTap: _onTabTapped,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(
@@ -74,7 +86,6 @@ class CustomBody extends StatelessWidget {
               ),
             ),
             Container(
-              height: 150,
               width: 150,
               margin: const EdgeInsets.all(50),
               padding: const EdgeInsets.all(50),
