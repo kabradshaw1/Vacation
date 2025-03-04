@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/graphql/character.dart';
+import 'package:mobile/pages/character.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -11,20 +11,43 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  // @override
-  // initState() {
-  //   super.initState();
-  // }
+  int _selectedIndex = 0; // Track which tab is active
+
+  // Define the screens
+  static const List<Widget> _pages = <Widget>[
+    CustomBody(), // Home Page
+    CharacterList(), // Character List Page
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index; // Update selected index when tapping a tab
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-
         title: Text(widget.title),
       ),
-      body: const CharacterList(),
+      body: IndexedStack(
+        // Keeps pages in memory when switching
+        index: _selectedIndex,
+        children: _pages,
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Characters',
+          ),
+        ],
+      ),
     );
   }
 }
