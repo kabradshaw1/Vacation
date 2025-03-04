@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/graphql/character.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -23,7 +24,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
         title: Text(widget.title),
       ),
-      body: const CustomBody(),
+      body: const CharacterList(),
     );
   }
 }
