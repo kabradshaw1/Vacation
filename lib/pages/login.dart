@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import '../graphql/auth.graphql.dart'; // Update with the correct path to generated GraphQL files
 import '../providers/auth_provider.dart';
+import '../graphql/auth.graphql.dart'; // Ensure correct import for GraphQL mutation
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -12,94 +12,82 @@ class LoginPage extends ConsumerStatefulWidget {
 }
 
 class _LoginPageState extends ConsumerState<LoginPage> {
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  bool isLoading = false; // Track loading state
 
   @override
   Widget build(BuildContext context) {
+    final authNotifier = ref.read(authProvider.notifier);
+
     return Scaffold(
-      appBar: AppBar(title: const Text("Login")),
+      appBar: AppBar(title: const Text('Login')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(labelText: "Email"),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Please enter your email";
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(labelText: "Password"),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Please enter your password";
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
-              Mutation(
-                options: MutationOptions(
-                  document:
-                      documentNodeMutationloginMobile, // Generated mutation
-                  onCompleted: (dynamic resultData) {
-                    if (resultData != null) {
-                      final authData = Mutation$loginMobile.fromJson(
-                        resultData,
-                      );
-                      final token = authData.loginMobile?.token;
-                      final refreshToken = authData.loginMobile?.refreshToken;
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              controller: emailController,
+              decoration: const InputDecoration(labelText: "Email"),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: passwordController,
+              obscureText: true,
+              decoration: const InputDecoration(labelText: "Password"),
+            ),
+            const SizedBox(height: 24),
 
-                      if (token != null && refreshToken != null) {
-                        ref
-                            .read(authProvider.notifier)
-                            .saveAuthState(
-                              refreshToken: refreshToken,
-                              authToken: token,
-                            );
+            Mutation(
+              options: MutationOptions(
+                document:
+                    documentNodeMutationloginMobile, // ✅ Use generated GraphQL mutation
+                onCompleted: (dynamic resultData) async {
+                  setState(() => isLoading = false); // Stop loading
 
-                        // Navigate to home screen
-                        Navigator.pushReplacementNamed(context, "/home");
-                      }
+                  if (resultData != null) {
+                    final response = Mutation$loginMobile.fromJson(resultData);
+                    final token = response.loginMobile?.token;
+                    final refreshToken = response.loginMobile?.refreshToken;
+
+                    if (token != null && refreshToken != null) {
+                      await authNotifier.saveAuthState(token, refreshToken);
                     }
-                  },
-                  onError: (error) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text("Login failed: ${error.toString()}"),
+                  }
+                },
+                onError: (error) {
+                  setState(() => isLoading = false);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        "Login failed: ${error?.graphqlErrors.first.message}",
                       ),
-                    );
-                  },
-                ),
-                builder: (RunMutation runMutation, QueryResult? result) {
-                  return ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        runMutation(
-                          Variables$Mutation$loginMobile(
-                            email: _emailController.text,
-                            password: _passwordController.text,
-                          ).toJson(),
-                        );
-                      }
-                    },
-                    child: const Text("Login"),
+                    ),
                   );
                 },
               ),
-            ],
-          ),
+              builder: (RunMutation runMutation, QueryResult? result) {
+                return ElevatedButton(
+                  onPressed:
+                      isLoading
+                          ? null
+                          : () {
+                            setState(() => isLoading = true);
+
+                            runMutation({
+                              "email": emailController.text,
+                              "password": passwordController.text,
+                            });
+                          },
+                  child:
+                      isLoading
+                          ? const CircularProgressIndicator()
+                          : const Text("Login"),
+                );
+              },
+            ),
+          ],
         ),
       ),
     );

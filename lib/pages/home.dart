@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile/pages/character.dart';
+import 'package:mobile/providers/auth_provider.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -64,11 +66,13 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class CustomBody extends StatelessWidget {
+class CustomBody extends ConsumerWidget {
   const CustomBody({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authNotifier = ref.read(authProvider.notifier);
+
     return Center(
       child: Container(
         color: Colors.grey,
@@ -93,7 +97,22 @@ class CustomBody extends StatelessWidget {
                 color: Colors.teal,
                 borderRadius: BorderRadius.circular(25),
               ),
-              child: Text("it would appear so", selectionColor: Colors.black),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    "It would appear so",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () async {
+                      await authNotifier.logout(); // Clear authentication state
+                    },
+                    child: const Text("Logout"),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
