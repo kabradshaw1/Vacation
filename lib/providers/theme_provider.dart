@@ -92,10 +92,14 @@ class AppTheme {
         fontFamily: 'Orbitron',
         fontSize: 22,
         fontWeight: FontWeight.bold,
-        color: Color(0xFF60A5FA),
+        color: Color(0xFF60A5FA), // Blue text color
         letterSpacing: 0.1,
         decoration: TextDecoration.underline,
+        decorationColor: Color(
+          0xFF60A5FA,
+        ), // ✅ Ensures underline matches text color
       ),
+
       subHeadingStyle: const TextStyle(
         fontFamily: 'Orbitron',
         fontSize: 18,
@@ -126,7 +130,7 @@ class AppTheme {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
+            color: Colors.black.withAlpha(150),
             blurRadius: 8,
             offset: const Offset(2, 2),
           ),

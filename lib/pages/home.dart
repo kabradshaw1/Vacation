@@ -100,10 +100,7 @@ class CustomBody extends ConsumerWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text(
-                    "It would appear so",
-                    style: TextStyle(color: Colors.black),
-                  ),
+                  Text("It would appear so", style: theme.bodyStyle),
                   const SizedBox(height: 16),
                   ElevatedButton(
                     style: theme.buttonStyle,
