@@ -34,10 +34,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  @override
-  initState() {
-    super.initState();
-  }
+  // @override
+  // initState() {
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -48,31 +48,34 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              height: 100,
-              width: double.infinity,
-              margin: EdgeInsets.all(50),
-              padding: EdgeInsets.all(50),
-              decoration: BoxDecoration(
-                color: Colors.teal,
-                borderRadius: BorderRadius.circular(25.0),
+        child: Container(
+          color: Colors.grey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+
+            children: [
+              Container(
+                height: 100,
+                width: 100,
+                margin: EdgeInsets.all(50),
+                padding: EdgeInsets.all(50),
+                decoration: BoxDecoration(
+                  color: Colors.teal,
+                  borderRadius: BorderRadius.circular(25.0),
+                ),
               ),
-            ),
-            Container(
-              height: 150,
-              width: double.infinity,
-              margin: EdgeInsets.all(50),
-              padding: EdgeInsets.all(50),
-              decoration: BoxDecoration(
-                color: Colors.teal,
-                borderRadius: BorderRadius.circular(25.0),
+              Container(
+                height: 150,
+                width: 150,
+                margin: EdgeInsets.all(50),
+                padding: EdgeInsets.all(50),
+                decoration: BoxDecoration(
+                  color: Colors.teal,
+                  borderRadius: BorderRadius.circular(25.0),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
