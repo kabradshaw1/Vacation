@@ -19,7 +19,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // List of pages to show
   final List<Widget> _pages = [
-    const CustomBody(), // Home Page
+    CustomBody(), // Home Page
     const CharacterList(), // Character List Page
   ];
 
@@ -67,23 +67,26 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class CustomBody extends ConsumerWidget {
+  // ✅ Extend ConsumerWidget
   const CustomBody({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authNotifier = ref.read(authProvider.notifier);
+    final authNotifier = ref.read(
+      authProvider.notifier,
+    ); // ✅ Access Riverpod auth state
 
     return Center(
       child: Container(
         color: Colors.grey,
-        child: Row(
+        padding: const EdgeInsets.all(20),
+        child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               height: 100,
               width: 100,
-              margin: const EdgeInsets.all(50),
-              padding: const EdgeInsets.all(50),
+              margin: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Colors.teal,
                 borderRadius: BorderRadius.circular(25),
@@ -91,8 +94,8 @@ class CustomBody extends ConsumerWidget {
             ),
             Container(
               width: 150,
-              margin: const EdgeInsets.all(50),
-              padding: const EdgeInsets.all(50),
+              margin: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Colors.teal,
                 borderRadius: BorderRadius.circular(25),
@@ -107,7 +110,8 @@ class CustomBody extends ConsumerWidget {
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () async {
-                      await authNotifier.logout(); // Clear authentication state
+                      await authNotifier
+                          .logout(); // ✅ Clear authentication state
                     },
                     child: const Text("Logout"),
                   ),
