@@ -7,9 +7,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initHiveForFlutter();
 
-  runApp(
-    const ProviderScope(child: MyApp()),
-  ); // Wrap the app with ProviderScope
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
