@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'pages/main.dart';
 
 void main() {
   runApp(const MyApp());
@@ -47,37 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Container(
-          color: Colors.grey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-
-            children: [
-              Container(
-                height: 100,
-                width: 100,
-                margin: EdgeInsets.all(50),
-                padding: EdgeInsets.all(50),
-                decoration: BoxDecoration(
-                  color: Colors.teal,
-                  borderRadius: BorderRadius.circular(25.0),
-                ),
-              ),
-              Container(
-                height: 150,
-                width: 150,
-                margin: EdgeInsets.all(50),
-                padding: EdgeInsets.all(50),
-                decoration: BoxDecoration(
-                  color: Colors.teal,
-                  borderRadius: BorderRadius.circular(25.0),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+      body: const CustomBody(),
     );
   }
 }
