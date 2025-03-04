@@ -1,24 +1,28 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'auth_provider.dart'; // Import the auth provider
 
-final graphqlClientProvider = Provider<GraphQLClient>((ref) {
-  final authState = ref.watch(authProvider); // Watch for auth state updates
+class GraphQLConfig {
+  static Future<ValueNotifier<GraphQLClient>> initClient() async {
+    // Initialize Hive for Flutter
+    await initHiveForFlutter();
 
-  final HttpLink httpLink = HttpLink('http://localhost:4000/graphql');
+    // Define HTTP Link
+    final HttpLink httpLink = HttpLink('http://localhost:4000/graphql');
 
-  final AuthLink authLink = AuthLink(
-    getToken:
-        () async =>
-            authState.authToken != null
-                ? 'Bearer ${authState.authToken}'
-                : null, // Automatically attach short-lived token
-  );
+    // Authentication Link
+    final AuthLink authLink = AuthLink(
+      getToken: () async => 'Bearer <YOUR_PERSONAL_ACCESS_TOKEN>',
+    );
 
-  final Link link = authLink.concat(httpLink);
+    // Combine AuthLink and HttpLink
+    final Link link = authLink.concat(httpLink);
 
-  return GraphQLClient(
-    link: link,
-    cache: GraphQLCache(store: HiveStore()), // Enables persistence
-  );
-});
+    // Create GraphQL Client
+    return ValueNotifier(
+      GraphQLClient(
+        link: link,
+        cache: GraphQLCache(store: HiveStore()), // Enables persistence
+      ),
+    );
+  }
+}

@@ -1,49 +1,46 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import '../graphql/character.graphql.dart';
-import '../providers/graphql_config.dart';
 
-class CharacterList extends ConsumerWidget {
+class CharacterList extends StatelessWidget {
   const CharacterList({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final client = ref.watch(
-      graphqlClientProvider,
-    ); // Get GraphQLClient from Riverpod
-
-    return FutureBuilder<QueryResult>(
-      future: client.query(QueryOptions(document: documentNodeQueryCharacters)),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+  Widget build(BuildContext context) {
+    return Query(
+      options: QueryOptions(
+        document: documentNodeQueryCharacters, // Use the generated query
+        pollInterval: const Duration(seconds: 10), // Auto-refresh every 10s
+      ),
+      builder: (QueryResult result, {FetchMore? fetchMore, Refetch? refetch}) {
+        if (result.isLoading) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        if (snapshot.hasError || snapshot.data?.hasException == true) {
-          return Center(
-            child: Text(
-              'Error: ${snapshot.error ?? snapshot.data?.exception.toString()}',
-            ),
-          );
+        if (result.hasException) {
+          return Center(child: Text('Error: ${result.exception.toString()}'));
         }
 
-        final data = Query$Characters.fromJson(snapshot.data!.data!);
+        // Deserialize response using the generated model
+        final data = Query$Characters.fromJson(result.data!);
         final List<Query$Characters$characters?>? characters = data.characters;
 
         if (characters == null || characters.isEmpty) {
           return const Center(child: Text("No characters found."));
         }
 
-        return ListView.builder(
-          itemCount: characters.length,
-          itemBuilder: (context, index) {
-            final character = characters[index];
+        return Container(
+          color: Colors.blueAccent,
+          child: ListView.builder(
+            itemCount: characters.length,
+            itemBuilder: (context, index) {
+              final character = characters[index];
 
-            if (character == null) return const SizedBox.shrink();
+              if (character == null) return const SizedBox.shrink();
 
-            return ListTile(title: Text(character.title));
-          },
+              return ListTile(title: Text(character.title));
+            },
+          ),
         );
       },
     );
