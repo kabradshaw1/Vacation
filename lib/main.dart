@@ -76,15 +76,16 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
-              height: double.infinity,
-              width: 100,
+              height: 150,
+              width: 150,
               decoration: BoxDecoration(
+                color: Colors.teal,
                 borderRadius: BorderRadius.circular(25.0),
-                color: Colors.blueAccent,
               ),
-              padding: EdgeInsets.all(50.0),
+
               child: const Text(
                 'Hello bitches',
+
                 style: TextStyle(color: Colors.cyan),
               ),
             ),
