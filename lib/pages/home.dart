@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile/pages/character.dart';
 import 'package:mobile/providers/auth_provider.dart';
+import '../providers/theme_provider.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -75,7 +76,7 @@ class CustomBody extends ConsumerWidget {
     final authNotifier = ref.read(
       authProvider.notifier,
     ); // ✅ Access Riverpod auth state
-
+    final theme = ref.watch(themeProvider);
     return Center(
       child: Container(
         color: Colors.grey,
@@ -84,13 +85,9 @@ class CustomBody extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              height: 100,
-              width: 100,
               margin: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.teal,
-                borderRadius: BorderRadius.circular(25),
-              ),
+              decoration: theme.cardDecoration,
+              child: Text("Welcome", style: theme.headingStyle),
             ),
             Container(
               width: 150,
@@ -109,6 +106,7 @@ class CustomBody extends ConsumerWidget {
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
+                    style: theme.buttonStyle,
                     onPressed: () async {
                       await authNotifier
                           .logout(); // ✅ Clear authentication state
