@@ -82,7 +82,7 @@ class CustomBody extends StatelessWidget {
               padding: const EdgeInsets.all(50),
               decoration: BoxDecoration(
                 color: Colors.teal,
-                borderRadius: BorderRadius.circular(25.0),
+                borderRadius: BorderRadius.circular(25),
               ),
             ),
             Container(
@@ -91,7 +91,7 @@ class CustomBody extends StatelessWidget {
               padding: const EdgeInsets.all(50),
               decoration: BoxDecoration(
                 color: Colors.teal,
-                borderRadius: BorderRadius.circular(25.0),
+                borderRadius: BorderRadius.circular(25),
               ),
               child: Text("it would appear so", selectionColor: Colors.black),
             ),

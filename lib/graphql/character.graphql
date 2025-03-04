@@ -1,7 +1,37 @@
-query getCharacters {
+fragment AllCharacter on Character {
+  id
+  title
+  text
+  createdAt
+  user
+  roles {
+    title
+    id
+    organization {
+      title
+      id
+    }
+  }
+  images {
+    fileName
+    URL
+    x
+    y
+    id
+  }
+}
+
+fragment ExistingCharacter on Character {
+  scenes {
+    startTimeline
+    endTimeline
+    title
+    id
+  }
+}
+query Characters {
   characters(input: {}) {
     title
     text
-    
   }
 }

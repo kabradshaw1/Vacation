@@ -1,28 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import '../graphql/character.graphql.dart';
+import '../providers/graphql_config.dart';
 
-class CharacterList extends StatelessWidget {
+class CharacterList extends ConsumerWidget {
   const CharacterList({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Query(
-      options: QueryOptions(
-        document: documentNodeQuerygetCharacters, // Use the generated query
-        pollInterval: const Duration(seconds: 10), // Auto-refresh every 10s
+  Widget build(BuildContext context, WidgetRef ref) {
+    final client = ref.watch(
+      graphqlClientProvider,
+    ); // Get GraphQLClient from Riverpod
+
+    return FutureBuilder<QueryResult>(
+      future: client.query(
+        QueryOptions(document: documentNodeQuerygetCharacters),
       ),
-      builder: (QueryResult result, {FetchMore? fetchMore, Refetch? refetch}) {
-        if (result.isLoading) {
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        if (result.hasException) {
-          return Center(child: Text('Error: ${result.exception.toString()}'));
+        if (snapshot.hasError || snapshot.data?.hasException == true) {
+          return Center(
+            child: Text(
+              'Error: ${snapshot.error ?? snapshot.data?.exception.toString()}',
+            ),
+          );
         }
 
-        // Deserialize response using the generated model
-        final data = Query$getCharacters.fromJson(result.data!);
+        final data = Query$getCharacters.fromJson(snapshot.data!.data!);
         final List<Query$getCharacters$characters?>? characters =
             data.characters;
 
@@ -30,18 +38,15 @@ class CharacterList extends StatelessWidget {
           return const Center(child: Text("No characters found."));
         }
 
-        return Container(
-          color: Colors.blueAccent,
-          child: ListView.builder(
-            itemCount: characters.length,
-            itemBuilder: (context, index) {
-              final character = characters[index];
+        return ListView.builder(
+          itemCount: characters.length,
+          itemBuilder: (context, index) {
+            final character = characters[index];
 
-              if (character == null) return const SizedBox.shrink();
+            if (character == null) return const SizedBox.shrink();
 
-              return ListTile(title: Text(character.title));
-            },
-          ),
+            return ListTile(title: Text(character.title));
+          },
         );
       },
     );
