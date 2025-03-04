@@ -9,14 +9,8 @@ class AuthState {
   final String? refreshToken;
   final String? authToken;
   final bool isGuest;
-  final String? username;
 
-  AuthState({
-    this.refreshToken,
-    this.authToken,
-    this.isGuest = false,
-    this.username,
-  });
+  AuthState({this.refreshToken, this.authToken, this.isGuest = false});
 
   AuthState copyWith({
     String? refreshToken,
@@ -28,7 +22,6 @@ class AuthState {
       refreshToken: refreshToken ?? this.refreshToken,
       authToken: authToken ?? this.authToken,
       isGuest: isGuest ?? this.isGuest,
-      username: username ?? this.username,
     );
   }
 }
@@ -78,6 +71,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   // Log out and clear authentication
   Future<void> logout() async {
     await _secureStorage.delete(key: 'refreshToken');
+    await _secureStorage.delete(key: 'authToken');
     await _secureStorage.delete(key: 'guest');
     state = AuthState();
   }
