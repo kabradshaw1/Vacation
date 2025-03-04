@@ -9,19 +9,26 @@ class AuthState {
   final String? refreshToken;
   final String? authToken;
   final bool isGuest;
+  final bool isAuthenticated;
 
-  AuthState({this.refreshToken, this.authToken, this.isGuest = false});
+  AuthState({
+    this.refreshToken,
+    this.authToken,
+    this.isGuest = false,
+    this.isAuthenticated = false,
+  });
 
   AuthState copyWith({
     String? refreshToken,
     String? authToken,
-    bool? isGuest,
-    String? username,
+    required isGuest,
+    required bool isAuthenticated,
   }) {
     return AuthState(
       refreshToken: refreshToken ?? this.refreshToken,
       authToken: authToken ?? this.authToken,
-      isGuest: isGuest ?? this.isGuest,
+      isGuest: this.isGuest,
+      isAuthenticated: this.isAuthenticated,
     );
   }
 }
@@ -40,20 +47,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
       authToken: null, // Short-lived tokens are generated dynamically
       isGuest: isGuest,
     );
-  }
-
-  // Save new authentication tokens
-  Future<void> saveAuthState({
-    required String refreshToken,
-    String? authToken,
-  }) async {
-    await _secureStorage.write(key: 'refreshToken', value: refreshToken);
-    state = state.copyWith(refreshToken: refreshToken, authToken: authToken);
-  }
-
-  // Update short-lived token for API requests
-  void updateAuthToken(String newToken) {
-    state = state.copyWith(authToken: newToken);
   }
 
   // Enable guest mode

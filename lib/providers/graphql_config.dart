@@ -1,23 +1,22 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:flutter/foundation.dart'; // Import ValueNotifier
+import 'auth_provider.dart'; // Import the auth provider
 
 class GraphQLConfig {
-  static Future<ValueNotifier<GraphQLClient>> initClient() async {
-    // Initialize Hive for Flutter
+  static Future<ValueNotifier<GraphQLClient>> initClient(
+    String? authToken,
+  ) async {
     await initHiveForFlutter();
 
-    // Define HTTP Link
     final HttpLink httpLink = HttpLink('http://localhost:4000/graphql');
 
-    // Authentication Link
     final AuthLink authLink = AuthLink(
-      getToken: () async => 'Bearer <YOUR_PERSONAL_ACCESS_TOKEN>',
+      getToken: () async => authToken != null ? 'Bearer $authToken' : null,
     );
 
-    // Combine AuthLink and HttpLink
     final Link link = authLink.concat(httpLink);
 
-    // Create GraphQL Client
     return ValueNotifier(
       GraphQLClient(
         link: link,
@@ -26,3 +25,11 @@ class GraphQLConfig {
     );
   }
 }
+
+// ✅ Riverpod FutureProvider to get GraphQLClient with updated auth token
+final graphqlClientProvider = FutureProvider<ValueNotifier<GraphQLClient>>((
+  ref,
+) async {
+  final authState = ref.watch(authProvider);
+  return await GraphQLConfig.initClient(authState.authToken);
+});
