@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart'; // Import Riverpod
-import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'pages/home.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initHiveForFlutter();
 
-  runApp(const ProviderScope(child: MyApp())); // Wrap in ProviderScope
+  runApp(
+    const ProviderScope(child: MyApp()),
+  ); // Wrap the app with ProviderScope
 }
 
 class MyApp extends StatelessWidget {
