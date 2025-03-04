@@ -1,0 +1,41 @@
+{
+  
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
+    "[go]": {
+      "editor.defaultFormatter": "golang.go",
+      "editor.formatOnSave": true,
+      "editor.formatOnPaste": false
+    },
+    "[prisma]": {
+      "editor.defaultFormatter": "Prisma.prisma",
+      "editor.formatOnSave": true
+    },
+    "editor.formatOnType": false, // required
+    "editor.formatOnPaste": true, // optional
+    "editor.formatOnSave": true, // optional
+    "editor.formatOnSaveMode": "file", // required to format on save
+    "files.autoSave": "onFocusChange", // optional but recommended
+    "vs-code-prettier-eslint.prettierLast": false, // set as "true" to run 'prettier' last not first
+    "explorer.autoReveal": false,
+    "workbench.editor.enablePreview": true,
+    "workbench.editor.enablePreviewFromQuickOpen": true,
+    "workbench.editor.showTabs": "multiple",
+    "typescript.preferences.importModuleSpecifier": "shortest",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    },
+    "editor.tabSize": 2,
+    "editor.detectIndentation": false, // Ensures consistent tab size, even if files have different settings
+    "[typescript]": {
+      "editor.tabSize": 2
+    },
+    "[javascript]": {
+      "editor.tabSize": 2
+    },
+    "ansible.python.interpreterPath": "/opt/homebrew/bin/python3",
+    "tailwindCSS.experimental.classRegex": [
+      ["className=\"([^\"]+)\"", "className"]
+    ],
+    "css.lint.unknownAtRules": "ignore"
+  }
+  
