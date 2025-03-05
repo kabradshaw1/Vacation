@@ -85,10 +85,22 @@ class CustomBody extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              margin: const EdgeInsets.all(20),
+              margin: const EdgeInsets.all(20), // ✅ Space around the card
               decoration: theme.cardDecoration,
-              child: Text("Welcome", style: theme.headingStyle),
+              child: Padding(
+                padding: const EdgeInsets.all(
+                  8,
+                ), // ✅ Inner padding inside the card
+                child: Text(
+                  "GALAXY VOYAGERS",
+                  style: theme.headingStyle,
+                  textAlign:
+                      TextAlign
+                          .center, // (Optional) Centers text inside the box
+                ),
+              ),
             ),
+
             Container(
               width: 150,
               margin: const EdgeInsets.all(20),
@@ -100,7 +112,7 @@ class CustomBody extends ConsumerWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text("It would appear so", style: theme.bodyStyle),
+                  Text("It would appear so"),
                   const SizedBox(height: 16),
                   ElevatedButton(
                     style: theme.buttonStyle,

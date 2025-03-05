@@ -62,6 +62,10 @@ flutter:
       fonts:
         - asset: fonts/Orbitron-Regular.ttf
         - asset: fonts/Orbitron-Bold.ttf
+        - asset: fonts/Orbitron-ExtraBold.ttf
+        - asset: fonts/Orbitron-SemiBold.ttf
+        - asset: fonts/Orbitron-Black.ttf
+        - asset: fonts/Orbitron-Medium.ttf
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
