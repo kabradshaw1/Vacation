@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile/providers/theme_provider.dart';
 import '../providers/auth_provider.dart';
-import '../pages/home.dart';
+import '../pages/layout.dart';
 import '../pages/login.dart';
 
 class AppRouter extends ConsumerWidget {
