@@ -14,7 +14,6 @@ class AppTheme {
   final ButtonStyle buttonStyle;
   final BoxDecoration cardDecoration;
   final BoxDecoration altCardDecorations;
-  final Padding cardPadding;
 
   AppTheme({
     required this.themeData,
@@ -27,7 +26,6 @@ class AppTheme {
     required this.labelStyle,
     required this.buttonStyle,
     required this.cardDecoration,
-    required this.cardPadding,
     required this.altCardDecorations,
   });
 
@@ -86,7 +84,6 @@ class AppTheme {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         elevation: 3,
       ),
-      cardPadding: Padding(padding: const EdgeInsets.all(8)),
       cardDecoration: BoxDecoration(
         color: AppColors.darkGray,
         borderRadius: BorderRadius.circular(12),

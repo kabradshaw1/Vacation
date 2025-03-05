@@ -17,15 +17,15 @@ class CustomCard extends ConsumerWidget {
     final theme = ref.watch(themeProvider);
 
     return Padding(
-      padding: EdgeInsets.all(theme.cardPadding), // ✅ Apply themed padding
+      padding: EdgeInsets.all(8), // ✅ Apply themed padding
       child: Container(
         decoration:
             isAlternate
                 ? theme
-                    .alternateCardDecoration // ✅ Use alternate color if true
+                    .altCardDecorations // ✅ Use alternate color if true
                 : theme.cardDecoration, // ✅ Default card
         child: Padding(
-          padding: EdgeInsets.all(theme.cardPadding), // ✅ Inner padding
+          padding: EdgeInsets.all(8), // ✅ Inner padding
           child: child,
         ),
       ),
