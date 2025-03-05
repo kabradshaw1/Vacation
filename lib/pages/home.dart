@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mobile/components/cards.dart';
 import 'package:mobile/pages/character.dart';
 import 'package:mobile/providers/auth_provider.dart';
 import '../providers/theme_provider.dart';
@@ -84,20 +85,12 @@ class CustomBody extends ConsumerWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              margin: const EdgeInsets.all(20), // ✅ Space around the card
-              decoration: theme.cardDecoration,
-              child: Padding(
-                padding: const EdgeInsets.all(
-                  8,
-                ), // ✅ Inner padding inside the card
-                child: Text(
-                  "GALAXY VOYAGERS",
-                  style: theme.headingStyle,
-                  textAlign:
-                      TextAlign
-                          .center, // (Optional) Centers text inside the box
-                ),
+            CustomCard(
+              child: Text(
+                "GALAXY VOYAGERS",
+                style: theme.headingStyle,
+                textAlign:
+                    TextAlign.center, // (Optional) Centers text inside the box
               ),
             ),
 
